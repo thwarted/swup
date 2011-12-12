@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [ ! -x /usr/bin/swup ]; then
+  echo "Could not find swup binary"
+  exit 1
+fi
+
+SWUPARGS='--upgrade --quiet'
+
+if [ -f /etc/swup/swup-cron.conf ]; then
+  . /etc/swup/swup-cron.conf
+fi
+
+/usr/bin/swup $SWUPARGS
+exit $?

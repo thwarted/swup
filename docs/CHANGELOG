@@ -1,0 +1,342 @@
+2005-08-12 - SWUP version 2.7.15
+- Added swup-cgi sub package
+  + Added swup-cgi httpd.conf file
+  + Added swup-cgi GNUMakefile
+  + Added swup-cgi config file
+
+2005-08-12 - SWUP version 2.7.14
+- Merged swup-libs and swup-rdfgen into swup; no real need for the split
+  and the split cause more pain than gain as it is.
+- Gave swup-cron a config file so that user can define what command line
+  arguments swup-cron is run with.
+
+2005-08-11 - SWUP version 2.7.13
+- Added swup_query-py cgi script
+- Parsable output from --search-package
+- Write stats information to tty only for better parsability
+
+2005-07-20 - SWUP version 2.7.12
+- Enhancement: also use roots keyring in addition to pubring.gpg
+
+2005-07-20 - SWUP version 2.7.11
+- Enhancement: copy systems pubring.gpg if no available as user =! root
+
+2005-07-12 - SWUP version 2.7.10
+- Bugfix: https://bugs.trustix.org/show_bug.cgi?id=1069
+
+2005-07-01 - SWUP version 2.7.9
+- Bugfix: https://bugs.trustix.org/show_bug.cgi?id=1011
+
+2005-06-30 - SWUP version 2.7.8
+- Bugfix: https://bugs.trustix.org/show_bug.cgi?id=998
+
+2005-06-29 - SWUP version 2.7.7 Released
+- Bugfix: rdfgen: Fixed typo and thinko
+
+2005-06-23 - SWUP version 2.7.6 Released
+- Bugfix: swup: Better handling of bad regexps
+- Bugfix: swup: Removed '+' from the regexp subset used by swup.
+
+2005-06-22 - SWUP version 2.7.5 Released
+- Bugfix: https://bugs.trustix.org/show_bug.cgi?id=910
+- Bugfix: https://bugs.trustix.org/show_bug.cgi?id=949
+- Bugfix: https://bugs.trustix.org/show_bug.cgi?id=908
+
+2005-06-20 - SWUP version 2.7.4 Released
+- Bugfix: swup: Better error reporting with --stage
+- Bugfix: swup: --search-file must search file *with* path
+
+2005-06-13 - SWUP version 2.7.3 Released
+- Bugfix: https://bugs.trustix.org/show_bug.cgi?id=907
+- Bugfix: https://bugs.trustix.org/show_bug.cgi?id=840
+- Bugfix: https://bugs.trustix.org/show_bug.cgi?id=875
+- Bugfix: https://bugs.trustix.org/show_bug.cgi?id=731
+
+2005-06-02 - SWUP version 2.7.2 Released
+- Bugfix: swup: typo in rpmdriver fixed
+
+2005-06-01 - SWUP version 2.7.1 Released
+- Change: swup: --remove checks if swup will be removed and if so stops.
+- Add: swup: --force option to force swup to continue in spite of some of the
+  warnings.
+- Enhancement: swup: support per-package progress when resolving
+
+2005-05-24 - SWUP version 2.6.21 Released
+- Bugfix: swuplib: flush stdout after writing
+- Enhancement: make sure everything uses the log module correctly
+- Enhancement: swup: https://bugs.trustix.org/show_bug.cgi?id=675
+
+2005-05-18 - SWUP version 2.6.20 Released
+- Bugfix: swup: Not needed sys.stderr.flush call broke pipes while parsing
+  output.
+
+2005-05-13 - SWUP version 2.6.19 Released
+- Improvement: swup: mopre detailed output with installing and downloading
+  with --stage
+- Bugfix: swup: https://bugs.trustix.org/show_bug.cgi?id=59
+- Improvement: swup: output when Initializing and --stage
+- Bugfix: swup: https://bugs.trustix.org/show_bug.cgi?id=407
+
+2005-03-29 - SWUP version 2.6.18 Released
+- Bugfix: swup: remove resources from duplicate providers
+- Bugfix: swup: Issue with out of sync repositories fixed
+
+2005-02-14 - SWUP version 2.6.17 Released
+- Improvement: swup: added --ignore-manual-upgrade
+
+2005-02-09 - SWUP version 2.6.16 Released
+- Improvement: swup: progress output with --stage
+- Bugfix: swup: combination of save-to and stage was broken
+
+2004-12-07 - SWUP version 2.6.15 Released
+- Bugfix: swup: handle 1 char-named packages correctly
+- Bugfix: swup: error in conflicts handling
+- Bugfix: rdfgen: man page and help info updated
+
+2004-12-01 - SWUP version 2.6.14 Released
+- Bugfix: swup: Handle case with no resource providers at all.
+- Bugfix: swup: fixed thinko in transaction creation
+- Bugfix: swup: discard duplicate resource providers when from lesser classes
+- Bugfix: swup: fix broken output on long filenames
+
+2004-11-30 - SWUP version 2.6.13 Released
+- Improvement: rdfgen: don't rely too heavily on remote repos.
+- Improvement: rdfgen: autoforce -b if one or more of remote repos are old style
+- Improvement: swup: use resources.rdf as default in all sections of the code,
+  fallback to resourcelist.rdf if no such file is found.
+- Improvement: swup: output that looks good when number of pkgs to install /
+  upgrade is between 999 and 9999
+- Bugfix: swup: don't die if picked provider is excluded.
+- Bugfix: swup: skip transaction if picked provider is excluded.
+- Bugfix: swup: don't loop when arguments to --upgrade is given
+
+2004-11-26 - SWUP version 2.6.12 Released
+- Feature: rdfgen: Use resources.rdf
+- Improvement: rdfgen: cleanup in what switches we really need
+- Improvement: rdfgen: Compress as default
+- Improvement: rdfgen: Conditinaly backward compatible (torh)
+- Improvement: rdfgen: Use ~/.rdfgen style cachedirs
+- Bugfix: rdfgen: Flush cachedir before each run
+- Bugfix: swup: Don't try to install twice
+- Bugfix: swup: readd --import-key...
+
+2004-11-25 - SWUP version 2.6.11 Released
+- Improvement: output with --poll-only groups in transactions
+- Improvement: Not merge transactions unless we _really_ need to
+- Fetaure: --download-first: download all packages before installing
+- Feature: --stage: Support execution in stages
+- Bugfix: Don't mess up chache handling with amputee filenames
+
+2004-11-22 - SWUP version 2.6.10 Released
+- Bugfix: Fallback to old style resource handling when resource is not
+  found amongst resources from resources.rdf (christht)
+- Improvement: Move grabbing of resources.rdf to upgrade.py, add md5sum and
+  cache usage. (torh)
+- Imporovement: Rework of exception handling (torh)
+- Bugfix: typo in output, and better excetions handling when download of 
+  package.rdf.asc fails due to broken repos (christht)
+
+2004-11-18 - SWUP version 2.6.9 Released
+- Bugfix: Only download resources.rdf once...
+
+2004-11-18 - SWUP version 2.6.8 Released
+- Feature: Swup support for resources.rdf
+
+2004-11-16 - SWUP version 2.6.7 Released
+- Feature: rdfgen creates resources.rdf
+- Bugfix: various errors in swup_specific code
+
+2004-10-13 - SWUP version 2.6.6 Released
+- Bugfix: another error in the replace_var function
+- Bugfix: Only import pkgdriver if _wanted_ in config-parser.
+- Doc: --list-keys was missing from help
+
+2004-10-12 - SWUP version 2.6.5 Released
+- Bugfix: Thinko in swupgrade algorithm
+- Bugfix: Only import pkgdriver if needed in config-parser.
+- Todo: Only import pkgdriver if _wanted_ in config-parser.
+
+2004-08-19 - SWUP version 2.6.4 Released
+- Bugfix: Fixed several minor error handling bugs.
+
+2004-08-18 - SWUP version 2.6.3 Released
+- Improvement: reintroduced --local-first switch, it has it's purpose.
+- Feature: added --config-option option to manipulate arbitrary configuration
+  options on the command line. Functionality not yet implemented.
+
+2004-08-18 - SWUP version 2.6.2 Released
+- Bugfix: Another minor error handling bug fixed
+
+2004-08-18 - SWUP version 2.6.1 Released
+- Bugfix: Fixed several minor error handling bugs.
+
+2004-08-18 - SWUP version 2.6.0 Released
+- Improvement: Complete rewrite of error handling (expect bugs...)
+
+2004-08-12 - SWUP version 2.5.6 Released
+- Bugfix: two more paths relative to --root
+
+2004-08-12 - SWUP version 2.5.5 Released
+- Bugfix: swup works without config file
+- Bugfix: use $HOME/.gnupg in rdfgen signing
+
+2004-08-12 - SWUP version 2.5.4 Released
+- Bugfix: another swup-restart-upgrade bug.
+
+2004-08-12 - SWUP version 2.5.3 Released
+- Bugfix: swup should only restart if upgraded
+- Improvement: all files should be relative to --root
+
+2004-07-16 - SWUP version 2.5.2 Released
+- Feature: Rdfgen works good with detached sigs (think rdfs/signatures/)
+- Feature: implemented config option "flush_installed", making flushing optional
+- Improvement: prettier output in --describe
+
+2004-06-23 - SWUP version 2.5.1 Released
+- Improvement: restart of swup now uses os.execvp
+
+2004-06-22 - SWUP version 2.5.0 Released
+- Feature: Implemented conditional auto-reboot
+- Improvement: search-provide renamed to search-resource
+- Improvement: search-resource now have working output
+
+2004-06-18 - SWUP version 2.4.7 Released
+- Improvement: --list-prospect to --list-new :)
+- Improvement: --list-new more parsable
+
+2004-05-24 - SWUP version 2.4.6 Released
+- Bug: fixed non-root install
+- Bug: fixed parsing of lockfile pid
+- Feature: --search-provide (pass 1)
+- Improvement: flush installed rpms
+- Improvement: don't flush lists when any of them changed 
+- Bug: fixed local file downloading bug
+- Bug: force encoding when outputting non-ascii
+- Bug: fixed RPM key checking
+- Bug: more epoch fixing (Omar)
+
+2004-05-13 - SWUP version 2.4.5 Released
+- Renamed --whatprovides to --what-provides
+- Changed a warning to stdout
+- Fix downloading of != .gz when it doesn't exist
+- Speed up --list-prospect
+- Remove serial from --describe
+- Minor output formatting in --what-provides
+- Added a per run DNS cache (this one vastly speeds up resolving)
+- Run download callback earlier
+- Small fix for local files downloading
+- Try to make gpg signing faster
+- --help fixes
+- Disable signature checking when installing rpms
+
+2004-05-09 - SWUP version 2.4.4 Released
+ - New feature --whatprovides
+ - Various bugfixes, including 
+   - output formatting
+   - make --ignore-lock work when using gpg key-operations
+   - download status fixing
+   - make non-root caching work again (moved a few lines)
+ - Disable internal rpm sigchecking for performance reasons when
+   doing rpm database lookups
+ - Optimised rdfgen reading of packages, disabled rpm md5 check
+ - If _generate_installed has been called, make get_package use
+   the already generated package and not create a new one.
+ - Don't generate self.conflictdata, isn't used anywhere
+
+2004-04-25 - SWUP version 2.4.3 Released
+ - Many --erase fixes, a new resolving algorithm by christht. Not implemented
+   asking user on the tty yet.
+ - Implemented --root, behaving similar to the rpm --root functionality.
+
+2004-04-24 - SWUP version 2.4.2 Released
+ - Added a --erase function to swup. This isn't very intelligent yet,
+   it only checks if the given package(s) is installed and then tries
+   to remove the package(s). If it is required by another package, it
+   spits out those requirements (very similar to the rpm client).
+   Expect resolving to come to a place near you soon.
+
+2004-04-21 - SWUP version 2.4.1 Released
+ - Fix epoch in a few places it wasn't taken into account
+ - Cosmetic changes, print out sitename when searching for file
+
+2004-04-16 - SWUP version 2.4.0 Released
+ - Use xml.sax instead of xmllib (with patch from Omar)
+ - Support unicode (Omar)
+ - Make rdf write encoding to xml-files
+ - Added option enabled = yes|no in site conf (Omar)
+ - Added system_version to pkgdriver (Omar)
+ - Added automatic basearch support (Omar)
+ - Added download status
+ - Some output formatting
+ - Complain if rpm doesn't find public key (Omar)
+
+
+2004-03-18 - SWUP version 2.3.17 Released
+ - Fixed more bugs in manual-upgrade handling
+
+2004-03-18 - SWUP version 2.3.16 Released
+ - Fixed bugs in manual-upgrade handling
+
+2004-03-18 - SWUP version 2.3.15 Released
+ - Fixed typo
+ 
+2004-03-15 - SWUP version 2.3.14 Released
+ - Added config error patch from Jaakko Heinonen
+ - Added TSEL config file
+ 
+2004-03-16 - SWUP version 2.3.13 Released
+ - manual upgrade now works as intended
+
+2004-03-09 - SWUP version 2.3.12 Released
+ - Bugfix update
+ - Fixed swup path in cron script
+ - Use singular ftp session
+ - enable http auth
+ - download cleanup
+
+2004-03-04 - SWUP version 2.3.11 Released
+ - Bugfix update
+
+2004-03-04 - SWUP version 2.3.10 Released
+ - Bugfix update
+
+2004-03-04 - SWUP version 2.3.9 Released
+ - Bugfix update
+
+2004-03-03 - SWUP version 2.3.8 Released
+ - Bugfix update
+ - Documentation fixes
+
+2004-03-02 - SWUP version 2.3.7 Released
+ - Bugfix update
+ 
+2004-03-01 - SWUP version 2.3.6 Released
+ - Bugfix update
+
+2004-02-27 - SWUP version 2.3.5 Released
+ - Bugfix update
+ - Updated configs
+
+2004-02-27 - SWUP version 2.3.4 Released
+ - Bugfix update
+
+2004-02-26 - SWUP version 2.3.3 Released
+ - Bugfix update
+ - Removed trigging of rpmlibs rather annoying memory leak
+
+2004-02-21 - SWUP version 2.3.1 Released
+ - Bugfix release
+
+2004-02-15 - SWUP version 2.3.1 Released
+ - Bugfix release
+
+2004-02-12 - SWUP version 2.3.0 Released
+ - Complete rewrite of most of the code (cleanup)
+ - Lockfile functionality
+ - Can run as normal user
+ - rdfgen handles signing, compressing and md5sum generation internally
+ - Better resolving, handles more corner-cases
+ - Upgrade package if already installed
+ - Upgrade swup first if new swup found, then restart
+ - Only rpmdriver.py is rpm aware
+ - Swup and rdfgen both uses pkgdriver.py, not rpmdriver directly

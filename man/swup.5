@@ -1,0 +1,131 @@
+.\" -*- nroff -*-
+.\" $Id: swup.5,v 1.7 2004/06/22 12:46:22 christht Exp $
+.\" Copyright (c) Trustix AS 2000 - 2003
+.TH SWUP 5 "Jun 22, 2004"
+.SH NAME
+swup \- format of the configuration file
+.SH DESCRIPTION
+.B swup.conf
+is a configuration file for the swup program.
+.SH FILE FORMAT
+.PP
+The configuration file consists of `name = value' and section entries
+with continuations in the style of RFC 822. Sections are specified by
+section name, and delimited by curly braces. Sections contain `name =
+value' entries. Lines begining with a hash, "#", will be ignored. The
+"#"-symbol can not be used for comments on a line with a variable
+definition. Example:
+
+option = value
+
+section {
+  option1 = value
+  option2 = value
+  }
+.SH REGEXP SYNTAX
+The regexp syntax is similar to what egrep use. See 
+.B "grep(1)"
+.SH VARIABLES
+.IP gnupgdir
+where gnupg public keyring and such is found. Default is
+/etc/swup/gnupg
+.IP save_to
+directory in were a copy of all downloaded software packages should be
+saved. If variable is empty or undefined, a copies will not be saved.
+.IP cachedir
+directory to which downloaded files are stored.
+.IP tmpdir
+directory to which files are stored temporarily under the download
+process.
+.IP "auto_reboot"
+["yes"|"no"] -
+If this option is enabled swup will reboot the system after execution if it is
+found to be suitable. This is triggered by packages that needs a reboot to be
+activated (think kernel) are updated. Such packages must conflict with
+"swup_auto-reboot". Swup reboots the system after all transactions are
+completed.  Default is "no".
+.IP "reboot_delay"
+[0-9]* -
+Minutes to delay the trigged reboot. Default is 5.
+.IP "interactive_logged"
+["yes"|"no"] -
+Write to logfile if session is run from a tty. Default is "yes".
+.IP "local_first"
+["yes"|"no"] -
+This option forces swup to depend more heavily on the local rpm database than
+on the remote repository. This is the way resource resolving used to be done in
+older versions and is a bit faster than the new layout, but does not handle
+package conflicts very well. The new algorithm will keep your system more in
+sync with the remote repository. The default value is "no".
+.IP "flush_installed"
+["yes"|"no"] -
+This options decides if swup should erase the rpm file in swup's cache after successfull installation of that rpm. The default value is "yes".
+.IP sites
+Section that provides information about where to get information about
+software. A sites section is specified by
+
+site {
+  class = <unsigned int>
+  location = <URI>
+  regexp = <regular expression>
+  }
+.RS
+.PP
+.I class 
+- an unsigned integer specifying what class the site has. 0 is the
+greatest class, with increasing numbers having less priority. Two
+sites can have the same class, but only the first one that works in
+that class will be used, i.e. sites with same class can be alternates.
+.PP
+.PP
+.I enabled 
+["yes"|"no"] - if "no" is specified, swup will ignore this site.
+.PP
+.I location
+- the uniformed resource identifier to the file in which
+SPI-information can be found. Normally that would a file called
+\'latest.rdf\'.
+- For HTTP and HTTPS authentication the uri should be in the form of 
+  'username:password@protocol://machine/path/file'
+.PP
+.I regexp
+- the regular expression of which packages at the site that are
+allowed to be used for install or upgrades. See "REGEXP SYNTAX" above.
+.RE
+.IP "exclude/include rules"
+Rules that control which packages can be upgraded. The rules are
+regular expressions and are used as search rules. I.e. a rule
+"kernel" will match the string
+`kernel', where as "kernel-.*2\\.2\\.12" will match both
+`kernel-source-2.2.12-20', `kernel-headers-2.2.12-20' and
+`kernel-2.2.12-20'.
+.RS
+.PP
+An exclude rule has higher precidence than an include rule. See "REGEXP SYNTAX"
+above for the syntax of the rules.
+.RS
+.PP
+.I exclude_pkg_regexp
+- deny upgrade of all packages whose name contains a substring that
+will match regexp.
+.PP
+.I include_pkg_regexp
+- allow upgrade of all packages whose name contains a substring that
+will match regexp.
+.RE
+.PP
+These rules may be ignored by using the
+.I --ignore-filter
+option.
+.SH FILES
+.I /etc/swup/swup.conf
+.RS
+System wide configuration file for swup.
+.I $HOME/.swup/conf/swup.conf
+User specific configuration file for swup (non-root only).
+.RE
+.SH AUTHORS
+Olaf Trygve Berglihn,
+Hans Almåsbakk,
+Christian H. Toldnes,
+Tor Hveem

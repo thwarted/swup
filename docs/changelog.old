@@ -1,0 +1,302 @@
+* 12.02.2004-2200 christht
+- Changelog format changed.
+  We use cvs now, so this format is not needed, and certainly not used by the
+  developers. :) I now move this file to changelog.old, and make the CHANGELOG
+  more of a general 'what changed between releases' kind of thing.
+
+* 26.01.2004-2200 torh
+- Documentation
+  - swup list-* switches
+  - rdfgen signing, zipping and md5-ing
+
+* 25.01.2004-2350 - christht/torh
+- Upgrade first swup if new swup is available, then re-run swup 
+- + Use old-style resolving to minimize amount of packages upgraded. 
+    (local_first)
+
+* 25.01.2004-1918 - torh
+- Make swup fail if no site with class = 0 was found
+
+* 22.01.2004-1542 - torh
+- rpmdriver now works on RPM4.2
+- remerged the rpmlib_hack
+- rdfgen now signes and compresses all files itself
+
+* 07.01.2004-1400 - christht
+- swup_install-if-upgrade
+- swup_manual-upgrade (an extra check is needed, not yet implemented)
+
+* 26.11.2003-1800 - torh
+- Makefile cleanups and package importing cleanups
+
+* 26.11.2003-0900 - christht
+- Makefile cleanups
+
+* 25.11.2003-2335 - torh
+- Makefiles fixing
+- Implemented site-package usage
+
+* 25.11.2003-1200 - christht
+- merged all code into one tree
+- added swup.cron
+- split common code into swuplib, will need some fixing
+- Cleaned up build environment (makefiles and so on)
+- merged CHANGELOG files, new layout:
+    
+    # New changelog layout:
+    # * DD.MM.YYYY-HHMM - author
+    # - change 1
+    # - change 2
+
+- Updated README included Tor
+
+#################################################
+# Merged changelog files from before code merge:#
+#################################################
+
+swup: 2.0.9 - 18.11.03 - torh
+- Renamed --list-new to --list-prospect (--list-new still works)
+
+swup: 2.0.8 - 17.11.03 - torh
+- Added feature --list-upgrade, lists packages that would be installed in
+  upgrade mode
+
+swup: 2.0.7 - 17.11.03 - torh
+- Added feature --list-downgrade, lists packages that have higher version
+  number compared to the configured repositories. Now --list-alien only lists
+  packages that don't exist at all
+
+swup: 2.0.6 - 16.11.03 - torh
+- Added feature --list-alien, lists packages that are newer/alien than the
+  repository defines 
+
+rdfgen: 1.7.1 - 12.11.2003 - torh
+- Use urllib2 if available
+
+swup: 2.0.5 - 12.11.03 - torh
+- Now only uses urllib2 if it present, else fallback to urllib
+
+swup: 2.0.4 - 12.11.03 - torh
+- Added output for impatient users
+
+swup: 2.0.3 - 11.11.03 - torh
+- Added feature --delete-key, removes a key from the keyring
+
+swup: 2.0.2 - christht
+- Fixed stupid 'bug' which made swup discard all not yet handled sites if:
+  (current site's class) > ((preceding site's class) + 1) Fix was to remove all
+  checking of pri against next_pri.  I see no reason for having this, as the
+  only apparent reason is to ensure that classes are incremental in the
+  sitelist, which is not documented as a requirement for swup to work.
+
+swup: 2.0.1 - christht
+- Added upgrade fixes from toreo to check multiple installations of package
+  with _exact_ same version and release. (Needed for install-only stuff)
+
+rdfgen: 1.7.0 - christht
+- Minor change to fit swup 2.x.x Should be backwards compatible though.
+
+swup: 2.0.0 - christht
+- Final 2.X release
+
+swup: 1.99.9 - christht
+- One cute fix: don't care about multiple versions of installed packages.
+
+swup: 1.99.8 - christht
+- The urllib callback information got lost after moving to urllib2.  Only tell
+  which package is downloaded for now, so the user dont get too disturbed when
+  things slow down... :) ( If we don't find a better solution, the callback
+  function may be dropped from source )
+- --ignore-filter bug fixed
+
+swup: 1.99.7 - christht
+- Removed --package option, still backward compatible though. #633219
+- Removed duplicates in Requirements (description)
+
+swup: 1.99.6 - christht
+- Added md5sum to description
+
+swup: 1.99.5 - christht
+- Added --describe <package name>
+
+swup: 1.99.4 - christht
+- Minor syntax error
+
+swup: 1.99.3 - christht
+- Obsoletes handling much improved.
+- removed 'known bugs' from manual page, this should not be an issue.
+- even better resolver.
+
+swup: 1.99.2 - christht
+- Source cleanup
+- Documentation cleanup
+- major speed improvements in the resolver #743661
+- No more filtering on group level
+- ignore-excludes -> ignore-filter
+
+swup: 1.99.1 - christht
+- Fixed bug #743657
+
+swup: 1.99.0 - christht
+- Fix bug #741014 
+      - New version scheme: 
+  N.99.M = RC-M before final release (N+1).0.0
+  N.98.M = BETA-M before final release (N+1).0.0
+  N.97.M = TP-M before final release (N+1).0.0
+
+rdfgen: 1.6.0 - christht
+- New version scheme
+
+swup: 0.1.34 - christht
+- Fix bug #740317 and feature request #740291
+
+swup: 0.1.33 - christht
+- Fix bugs #730152 and #739722
+
+swup: 0.1.32 - christht
+- Fix bugs #730123 and #730127
+
+rdfgen: 0.1.6 - christht
+- Patch from 0.1.5 missed the importing of 'utils'
+
+rdfgen: 0.1.5 - christht
+- Patch from 0.1.3 broke uri-handling on localhost.
+
+swup: 0.1.31 - christht
+- Fix bug #726130 (depend mostly on local db when resolving an installation)
+- Fix bug in --ignore-excludes handling.
+- #700846
+
+swup: 0.1.30 - christht
+- Kill rdfs fix
+
+swup: 0.1.29 - christht
+- More cache-fixing, let rdfs live untill proven useless, where 'prove' is a
+  new latest.rdf
+- Minor bugfix in swup_install-only setup
+
+rdfgen: 0.1.4 - christht
+- previus change made rdf.py write broken Resource and swup would break during
+  parsing of this rdf. Should be fixed now.
+
+rdfgen: 0.1.3 - christht
+- Made rdfgen generate rdfs even when errors occur. Errors are written to
+  stderr, so a simple 1> /dev/null will hide all but nice output.
+- Added patch from KenR to fix remote handling.
+
+swup: 0.1.28 - christht
+- Second take on the swup_install-only setup
+- Removed the barrier of multipler packages.
+
+swup: 0.1.27 - christht
+- Real fix for cache bug from 0.1.24
+
+swup: 0.1.26 - christht
+- Hack to fix cache bug from 0.1.24
+
+swup: 0.1.25 - christht
+- First take on the swup_install-only setup
+- Must fix the multiple package issues.
+
+swup: 0.1.24 - christht
+- Much better cache usage
+- Removed flush_cache configuration option
+- Removed --no-flush-cache command line option
+- Updated man pages
+
+swup: 0.1.23 - christht
+- Fix a bug in the syslog setup
+
+swup: 0.1.22 - christht
+- log some warnings
+- fix some new bugs.
+
+swup: 0.1.21 - christht
+- lost config argument when issuing download.Flush, fixed now
+
+swup: 0.1.20 - christht
+- Make swup --flush-cache use the 'cachedir' configuration variable
+
+swup: 0.1.19 - christht
+- Now uses syslog (local5) for logging.
+
+swup: 0.1.18 - christht
+- Not flush cache when errors occur.
+- Added --ignore-excludes option.
+
+swup: 0.1.17 - christht
+- Added --flush-cache option to let user empty cache.
+
+swup: 0.1.16 - christht
+- Much better HTTP result handling. Now we actually care about the status of
+  our request. :) (#693907)
+- Minor cleanup
+
+swup: 0.1.15 - christht
+- Minor cleanup
+
+swup: 0.1.14 - christht
+- Better gpg bad signature handling.
+- Fixed error introduced in 0.1.12, when no valid filelists are found.
+
+swup: 0.1.13 - christht
+- Added fix to let user know if a package he tries to upgrade is not installed
+  (#685891)
+
+swup: 0.1.12 - christht
+- Added fix to prevent swup from silently fail when no class = 0 where found.
+  (#682769) Thanks for letting me know, Dan.
+
+swup: 0.1.11 - christht
+- Added better warnings when using deprecated options. (#682192)
+- Not use env in swup.
+
+swup: 0.1.10 - christht
+- Changed 'priority' to 'class', to clearify the meaning. Both can still be
+  used.
+- Added patch from kenr, fixing 698096, 694241 and 693909 (duplicate)
+
+swup: 0.1.9 - christht
+- Fixed major bug in the handling of attempted upgrades / installations of
+  obsoleted packages.
+
+swup: 0.1.8 - hansa
+- Added functionality for package and file searching.
+- More extensive exception handling.
+- Made download of gzipped latest-info the default behaviour. (looks for
+  latest.rdf.gz/filelist.gz)
+
+swup: 0.1.5 - olafb
+- Changed syntax to work with python 2.0
+
+swup: 0.1.4 - olafb
+- Fixed bug that printed "this should never happen" when doing --list-keys,
+  etc.
+
+swup: 0.1.3 - olafb
+- Minor bugfixing.
+
+swup: 0.1.2 - olafb
+- Fixed bug that ignored regexps for sites.
+
+swup: 0.1.1 - olafb
+- Minor bugfixing.
+
+swup: 0.1.0 - olafb
+- Changed config file format for sites. Configuration file parsing is not
+  backwards compatible.
+- General code cleanup and better exception handling.
+
+swup: 0.0.8 - olafb
+- Added support for gz'ed files.
+- Now checking md5sum on latest-files and cache parsed data.
+
+swup: 0.0.7 - olafb
+- Added a new operation '--list-new' which lists available packages that are
+  not already installed.
+- Added a check for installed multiple versions of packages. Will now refuse to
+  upgrade a package if multiple versions are installed. Will now also refuse to
+  install if a package with same name is already installed.
+- Added --save-to flag and save_to variable in config. If variable/switch is
+  defined and is a name of an existing directory swup will try to save a copy
+  of all rpms downloaded to the directory.

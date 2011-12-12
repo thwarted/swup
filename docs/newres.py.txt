@@ -1,0 +1,126 @@
+The point of this exercise is to make swups resolver faster.
+
+
+In essens this is what I want to do:
+
+* generate self.latest like today.
+* Grab a big db_latest of all installed packages from the system
+* Merge db_latest with self.latest in such a way that I never have to ask
+  the rpmdb again if a package / resource is installed. 
+  Also update self.resources with extra info, but don't remove bad info.
+* Pick resource provider by checking if the provider is installed (pkg['local'])
+* Implement dependencies between transactions
+* remove all locally installed packages if they are not to be upgraded
+* check conflicts between sets and in transactions
+* sort and merge transactions
+* return to install ass normal.
+
+
+
+
+
+
+
+"""
+This layout has a worst case of having all packages installed while upgradeing
+all packages: O(n+n) = O(n)
+
+"""
+
+
+
+parse and merge to latest and resources
+
+removees = []
+
+get db_latest from rpmdriver
+
+
+#
+# get list of packages to install / upgrade. Either this list is what was on
+# The command line, or it is generated like with --list-upgrade, only much
+# less advanced: Dont check obsoletes, dont check excludes, just check that
+# they are available in latest or db_latest.
+#
+
+
+
+for installed in db_latest:
+	name = installed['name']
+	if is_excluded(name):
+		latest.del(name)
+		continue
+
+	if not latest.has_key(name):
+		# FIXME: Add to resources
+		latest[name] = installed
+		continue
+	
+	result = version_compare(installed,latest[name])
+	if result >= 0:
+		# FIXME: Add to resources
+		latest[name] = installed
+	else:
+		latest[name][action] = UPGRADE
+#
+# Now check if some other packages might be removed
+#
+
+removees = []
+for name, dict in latest.items():
+	if not dict.has_key('obsoletes'):
+		continue
+	dict['action'] = UPGRADE_OBS
+	for obs in dict['obsoletes']:
+		removees.append(obs)
+
+#
+# Remove the obsoleted packages:
+#
+
+for name in removees:
+        if latest.has_key(name):
+                latest.del(name)
+
+#
+# Latest is up to date. Check packages in list of installees:
+#
+
+for package in packages:
+	
+	if not flag == UPGRADE_OBS:
+		swup_specific()
+	
+	for req in requires:
+		found = False
+		resourcelist = resources['req'] || broken_trans
+		for res in resourcelist:
+			if not latest.has_key(res):
+				continue
+			#
+			# Check if the potential is installed:
+			#
+			if latest[res]['local']:
+				found = True
+				newpackage = latest[res]
+				# FIXME: handle deps between transactions
+				# FIXME: check if action == UPGRADE*
+				trans.new(newpackage)
+				break
+		if not found and len(resourcelist) > 0:
+			found = True
+			newpackage = latest[resourcelist[0]]
+			# FIXME handle deps between transactions
+			# FIXME: chek if action == UPGRADE*
+			trans.new(newpackage)
+		if not found:
+			broken_trans
+
+For trans in transactions()
+	remove_local_pkgs()
+
+check_conflicts(transactions)
+sort_and_order(transactions)
+
+return to upgrade!
+

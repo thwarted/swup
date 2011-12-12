@@ -1,0 +1,32 @@
+#!/bin/sh
+#
+# Sach - Swup Automated CHroot
+#
+#
+# Sach uses swup to create a chroot of rpms found in the configured
+# swup repository. It then enters the chroot and executes the command
+# line arguments.
+#
+#
+
+
+COMMAND="$*"
+CHROOTBASE='/var/lib/sach/roots'
+CHROOT="$CHROOTBASE/chroot1"
+KEYS="/usr/share/tsl-gpgkeys-sunchild/trustix-sunchild.pub.gpg"
+set -e
+
+echo "Removing any old chroot."
+rm -rf $CHROOT > /dev/null
+echo "Creating new chroot infrastructure."
+mkdir -p $CHROOT/var/lib/rpm > /dev/null
+echo "Initiating rpm database."
+rpm --initdb --root=$CHROOT > /dev/null
+echo "Importing swup gpg key(s)."
+for i in $KEYS; do
+    swup --silent --root $CHROOT --import-key $i
+done
+echo "Installing base build system in chroot."
+swup --silent --root $CHROOT --install rpm-build
+echo "Running '$COMMAND'"
+chroot $CHROOT $COMMAND

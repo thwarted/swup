@@ -1,0 +1,68 @@
+# $Id: swup.conf-Trustix,v 1.1 2004/06/18 12:37:52 christht Exp $
+
+# ========== Regexps ==========
+# Regexps to control which packages should be included in an upgrade
+# procedure. Please note that exclude_pkg_regexp overrides include_pkg_regexp.
+#
+
+include_pkg_regexp = ".*"
+exclude_pkg_regexp = "kernel.*"
+
+# ========== Sites ==========
+# Repositories for Software Package Information (SPI).
+# A site is specified by a triplet of class, URI, regexp, where packages 
+# matching regexp will be downloaded from URI. 
+#
+# Sites are specified in order of importance by using the integer 'class'. The
+# lowest integer has the highest precedence. 
+#
+# If two or more sites have the same class, the information is merged and the
+# latest packages will be used. If the packages have the same version and
+# release, the first site will be used, as it is expected to be closer to
+# your location than the second.
+# This means that you sould add local mirrors on top of the list, on a per 
+# class basis.
+#
+# For increased security you should always have at least two different sites as
+# class = '0', as this will normally be the main class for your distribution.
+# In case your local mirror stays out of sync with the official repositories
+# for a longer period of time, your system will still get the latest updates
+# from the other mirror. This also means that it is considered a Good Thing
+# to keep the official sites in the list, even if you will want to primary use
+# local mirrors for better speed in the normal case.
+#
+
+
+site {
+  name = "Trustix Official site 1"
+  class = 0
+  location = "http://download.trustix.com/DISTRIBUTION/$releasever/$basearch/trustix/rdfs/latest.rdf"
+  regexp = ".*"
+}
+
+site {
+  name = "Trustix Official site 2"
+  class = 0
+  location = "http://download2.trustix.com/DISTRIBUTION/$releasever/$basearch/trustix/rdfs/latest.rdf"
+  regexp = ".*"
+}
+
+# Official addons area.
+# A collection of packages that have been added after the official release.
+# These packages are supported on equal terms as the packages in the default
+# repositories. These packages are naturally not included on the CD.
+#
+#
+#site {
+#  name = "Trustix Addons site 1"
+#  class = 10
+#  location = "http://download.trustix.com/DISTRIBUTION/$releasever/$basearch/rdfs/latest.rdf"
+#  regexp = ".*"
+#}
+#
+#site {
+#  name = "Trustix Addons site 2"
+#  class = 10
+#  location = "http://download2.trustix.com/DISTRIBUTION/$releasever/$basearch/rdfs/latest.rdf"
+#  regexp = ".*"
+#}

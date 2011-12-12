@@ -1,0 +1,33 @@
+$Id: README,v 1.1.1.1 2003/11/25 10:38:00 torh Exp $
+
+SWUP README
+
+SWUP - Free Software updater is an extension for existing
+software packaging systems to facilitate automatic and secure update and
+install. SWUP handles dependencies between software packages, and is able
+to fetch additional required software when installing or upgrading.
+
+SWUP has high focus on security, and all information and software retrived
+from network is checked for digital signatures. Gnu Privacy Guard is used
+for this task, and a public key for any signature attached to
+downloaded file must be present in the swup gpg keyring (usually
+located in /etc/swup/gnupg/).
+
+
+CONFIGURATION
+
+Configuration file are generally located in /etc/swup/swup.conf
+Se manpages swup(5) or read the sample configuration file comments.
+
+
+INSTALLATION
+
+Simply run:
+	make
+	make install
+
+Author
+Olaf Trygve Berglihn <olafb@trustix.com>
+Updated by Hans Almåsbakk <hansa@trustix.com>
+Maintained by Christian H. Toldnes <christht@trustix.org>
+Co-Maintained by Tor Hveem <torh@trustix.org>

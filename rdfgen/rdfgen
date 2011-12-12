@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+# -*- python -*-
+# $Id: rdfgen,v 1.3 2005/05/24 12:23:00 christht Exp $
+
+RDFGEN_LIBDIR = '/usr/lib/rdfgen'
+IMPORTERROR_MESSAGE = \
+"""rdfgen: Fatal error: unable to load the rdfgen libraries from %s
+rdfgen: Check your rdfgen installation.\n""" % RDFGEN_LIBDIR
+
+import sys
+sys.path.append(RDFGEN_LIBDIR)
+try:
+    import rdfgen
+except ImportError, errmsg:
+    sys.stderr.write(IMPORTERROR_MESSAGE)
+    sys.exit(1)
+except:
+    raise
+
+try:
+    rdfgen.main(sys.argv[1:])
+except KeyboardInterrupt:
+    sys.stderr.write( "User interrupt - exiting.\n" )
+    sys.stderr.flush()
+    sys.exit(1)
+except:
+    raise

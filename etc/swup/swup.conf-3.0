@@ -1,0 +1,62 @@
+# $Id: swup.conf-3.0,v 1.2 2005/07/01 09:37:37 christht Exp $
+
+# ========== Regexps ==========
+# Regexps to control which packages should be included in an upgrade
+# procedure. Please note that exclude_pkg_regexp overrides include_pkg_regexp.
+#
+
+include_pkg_regexp = ".*"
+exclude_pkg_regexp = ""
+
+# ========== Sites ==========
+# Repositories for Software Package Information (SPI).
+# A site is specified by a triplet of class, URI, regexp, where packages 
+# matching regexp will be downloaded from URI. 
+#
+# Sites are specified in order of importance by using the integer 'class'. The
+# lowest integer has the highest precedence. 
+#
+# If two or more sites have the same class, the information is merged and the
+# latest packages will be used. If the packages have the same version and
+# release, the first site will be used, as it is expected to be closer to
+# your location than the second.
+# This means that you sould add local mirrors on top of the list, on a per 
+# class basis.
+#
+# For increased security you should always have at least two different sites as
+# class = '0', as this will normally be the main class for your distribution.
+# In case your local mirror stays out of sync with the official repositories
+# for a longer period of time, your system will still get the latest updates
+# from the other mirror. This also means that it is considered a Good Thing
+# to keep the official sites in the list, even if you will want to primary use
+# local mirrors for better speed in the normal case.
+#
+
+
+site {
+  class = 0
+  name = "Trustix Official http"
+  location = "http://http.trustix.org/pub/trustix/releases/trustix-3.0/i586/trustix/rdfs/"
+  regexp = ".*"
+}
+
+site {
+  name = "Trustix Official ftp"
+  class = 0
+  location = "ftp://ftp.trustix.org/pub/trustix/releases/trustix-3.0/i586/trustix/rdfs/"
+  regexp = ".*"
+}
+
+
+# Community contrib area.
+# If you like to use the contrib packages uncomment the section below.
+#
+# Remember to import the correct gpg key:
+# $ swup --import-key /usr/share/tsl-gpgkeys/trustix-gpgkey-contrib.pub.gpg
+#
+#site {
+#  name = "Community Contrib"
+#  class = 10
+#  location = "http://tsldev.trustix.org/community-3/i586/rdfs/latest.rdf"
+#  regexp = ".*"
+#}

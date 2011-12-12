@@ -1,0 +1,11 @@
+SLIBDIR = /usr/lib/swup
+RLIBDIR = /usr/lib/rdfgen
+SBINDIR = /usr/sbin
+BINDIR = /usr/bin
+MANDIR = /usr/share/man
+SITEDIR = /usr/lib/python`python -V 2>&1| cut -c8-10`/site-packages/swuplib
+CGIHOMEDIR = /home/swup
+CGIWEBDIR = /home/swup/public_html
+CGIBINDIR = /home/swup/public_html/cgi-bin
+HTTPDCONFDIR = /etc/httpd/conf.d
+DESTDIR =

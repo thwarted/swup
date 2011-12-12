@@ -1,0 +1,95 @@
+#!/sbin/bash
+#
+# Replace your stable, known good, supported SWUP installation with the latest
+# available unstable, not working, unsupported beta version from the SWUP
+# development team.  Doing this will probably break your system and render any
+# guarantee and support contracts void.  ONLY FOR DEVELOPERS AND BETA TESTERS!
+#
+#    Copyright (C) 2004 Comodo Trustix Limited
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of version 2 of the GNU General Public License as 
+#    published by the Free Software Foundation.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+
+set -e
+
+VERSION=0.1
+URL='http://swup.trustix.org/pub/releases/'
+NAME=$(basename $0)
+
+help(){
+echo "$NAME version $VERSION"
+echo "Usage:"
+echo "$0 --force"
+echo
+echo "Replace your stable, known good, supported SWUP installation with the" 
+echo "latest available unstable, not working, unsupported beta version from" 
+echo "the SWUP development team.  Doing this will probably break your system" 
+echo "and render any guarantee and support contracts void."
+echo "ONLY FOR DEVELOPERS AND BETA TESTERS!"
+exit 1
+}
+
+upgrade(){
+echo "Detected a newer version is available"
+wget $URL/swup-$LATEST.tar.bz2
+rpm -ta swup-$LATEST.tar.bz2
+BUILDARCH=$(rpm --showrc | grep _build_arch | awk '{print $3}')
+USR=$(rpm --showrc | grep _usr | awk '{print $3}' | grep ^/)
+USRSRC=$(rpm --showrc | grep _usrsrc | awk '{print $3}'| grep ^%{_usr}/ | sed "s|^%{_usr}|$USR|")
+TOPDIR=$(rpm --showrc | grep _topdir | awk '{print $3}'| grep ^%{_usrsrc}/ | sed "s|^%{_usrsrc}|$USRSRC|")
+RPMDIR=$( rpm --showrc | grep _rpmdir | awk '{print $3}'| grep ^%{_topdir}/ | sed "s|^%{_topdir}|$TOPDIR|")
+
+PKGDIR="$RPMDIR/$BUILDARCH"
+LIST=""
+for i in $INSTALLED; do
+    LIST="$LIST $PKGDIR/$i-$LATEST-*.$BUILDARCH.rpm"
+done
+rpm -Uvh $LIST
+
+}
+
+if [ x"$1" != x"--force" ]; then
+    help
+fi
+
+echo "Making sure you are root"
+id | cut -d ' ' -f 1 | grep -q root
+
+echo "Making sure swup is installed"
+VERSION=$(rpm -q swup --queryformat '%{version}')
+INSTALLED=$(rpm -qa --queryformat '%{name}\n'| grep swup)
+MAJOR=$(echo $VERSION | cut -d. -f1)
+MIDDLE=$(echo $VERSION | cut -d. -f2)
+MINOR=$(echo $VERSION | cut -d. -f3)
+
+TMPDIR=$(mktemp -d /tmp/beta-swup.XXXXXX)
+pushd $TMPDIR
+echo "Getting information about latest release"
+wget $URL/LATEST_IS
+LATEST=$(cat LATEST_IS)
+LATEST_MAJOR=$(echo $LATEST | cut -d. -f1)
+LATEST_MIDDLE=$(echo $LATEST | cut -d. -f2)
+LATEST_MINOR=$(echo $LATEST | cut -d. -f3)
+
+if [ $LATEST_MAJOR -gt $MAJOR ]; then
+    upgrade
+elif [ $LATEST_MAJOR -eq $MAJOR ]; then
+    if [ $LATEST_MIDDLE -gt $MIDDLE ]; then
+        upgrade
+    elif [ $LATEST_MIDDLE -eq $MIDDLE ]; then
+        if [ $LATEST_MINOR -gt $MINOR ]; then
+            upgrade
+        fi
+    fi
+fi
+popd
+rm -rf $TEMPDIR
+echo "Done"
+

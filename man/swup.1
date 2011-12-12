@@ -1,0 +1,229 @@
+.\" -*- nroff -*-
+.\" $Id: swup.1,v 1.25 2005/06/23 12:20:52 christht Exp $
+.\" Copyright (c) Trustix AS 2001 - 2003
+.TH "SWUP" "1" "Nov 22, 2004" "" ""
+.SH "NAME"
+swup \- SoftWare UPdater
+.SH "SYNOPSIS"
+.B swup <operation> [options] [args]
+.SH "DESCRIPTION"
+.B swup
+is short for ``Software Updater''. It is an advanced tool for installing, and
+upgrading software packages independent of packaging format. It resolves
+dependencies between the packages, and provides extensive functionality for
+querying this dependency information. It is typically a tool used by the system
+administrator, but can run automatically via a cron or at daemon, and the query
+functionality is also available for normal users. It support both HTTP and
+HTTPS protocols with or without user / password authentication, in addition to
+anonymous FTP, all used for efficient transfer of dependency data and software
+packages between the remote repository and the local machine. It also supports
+both transparent and nontransparent HTTP and FTP proxy.
+.SH "OPERATIONS"
+.IP "\-\-install"
+Install modus. Takes one (or several) argument(s),
+.I package
+, which is the name of the package(s) to install. The name does not include
+version information. E.g. vim, and not vim\-5.6\-3tr.i586.rpm. Package arguments
+can be regular expressions.
+.IP "\-\-upgrade"
+Upgrade modus. Takes one (or several) argument(s),
+.I package
+, which is the name of the package(s) to upgrade. The name does not include
+version information. E.g. vim, and not vim\-5.6\-3tr.i586.rpm. Package arguments
+can be regular expressions.
+.IP "\-\-remove"
+Remove modus. Takes one (or several) argument(s),
+.I package
+, which is the name of the package(s) to remove. The operation works recursive,
+and removes all packages that directly or indirectly depends upon the
+package(s) given as input. The name does not include version information. E.g.
+vim, and not vim\-5.6\-3tr.i586.rpm.
+.IP "\-\-list\-latest"
+List all packages available from remote repositories.
+.IP "\-\-list\-new"
+Same as
+.I "\-\-list\-latest"
+but only list packages not already installed.
+.IP "\-\-list\-alien"
+List installed packages that are not available in any of the configured 
+repositories.
+.IP "\-\-list\-downgrade"
+List installed packages that have a higher version than the remotely available 
+alternative.
+.IP "\-\-list\-upgrade"
+List installed packages that have a lower version than the remotely available
+alternative.
+.IP "\-\-search\-package"
+List all available package(s) whose name matches a given pattern. This 
+.I pattern
+argument can be a regular expression.
+.IP "\-\-search\-resource"
+List all available resource(s) whose name matches a given pattern. This 
+.I pattern
+argument can be a regular expression.
+.IP "\-\-search\-file"
+List all files matching a given pattern, prefixed by the package that owns the
+file. This
+.I pattern
+argument can be a regular expression.
+.IP "\-\-describe"
+Show a detailed description of a package provided by one or more of the 
+repositories. Takes one argument,
+.I package
+, which is the name of the package to describe. The name does not include 
+version information. E.g. vim, and not vim-5.6-3tr.i586.rpm.
+.IP "\-\-what-provides"
+Show a list of packages in the current configured repositories that provides 
+the given resource. Takes one argument,
+.I resourcename
+, which is the name of the resource to look up. Example,
+--what-provides /bin/sh should return 'bash'.
+.IP "\-\-import\-key"
+Import a gpg public key. Takes one argument, 
+.I filename
+, which is a file containing one (or several) gpg public key(s) to be 
+imported to the internal gpg keyring. Swup uses these public keys to 
+verify the integrity of the individual packages and resource data framework
+(rdf) files.
+.IP "\-\-delete\-key"
+Deletes a key from the swup keyring. Takes one argument,
+.I "key id"
+.IP "\-\-list\-keys"
+List the public keys in the gpg keyring which we trust for verifying 
+information integrity.
+.IP "\-\-help"
+Print brief usage information.
+.IP "\-\-version"
+Print version and copyright information.
+.SH "OPTIONS"
+.IP "\-\-poll\-only"
+Used together with
+.I "\-\-install"
+or
+.I "\-\-upgrade"
+this option will print the result of the dependency resolving process, but 
+will not try to download, install or upgrade any packages.
+.IP "\-\-ignore\-filter"
+This will ignore the 
+.I exclude 
+and
+.I include
+statements in the config file, and thereby treat all packages as equals.
+.IP "\-\-force"
+Force to continue in spite of warnings. Currently enforces operation on 
+warnings:
+.B "Removing package 'swup' not permitted"
+and
+.B "Manual upgrade required"
+
+.IP "\-\-ignore\-manual\-upgrade"
+Obsoleted by
+.I \-\-force
+.IP "\-\-package\-file file"
+Define a text file to read package names from instead of entering them 
+directly on the command line, package names are separated by newline.
+.IP "\-\-download\-only"
+Run as usual, download packages, but do not install.
+.IP "\-\-download\-first"
+First download packages, then install.
+.IP "\-\-stage"
+Run in stage mode. This splits swup execution into stages. It enables swup to
+run as backend to installers, including changing installation media if needed.
+Implies
+.I \-\-download\-first
+.IP "\-\-save\-to dir"
+Save a copy of all downloaded software packages to dir.
+.IP "\-\-config\-file file"
+Use the specified 
+.I config\-file
+instead of
+.I /etc/swup/swup.conf
+File should not contain non\-alphanumeric characters.
+.IP "\-\-config\-option option"
+Use the specified configuration option to override options in config file or
+hard coded defaults. (Not implemented yet) 
+.IP "\-\-repository\-URI URI"
+Use Uniform Resource Allocator to file that contains a list of latest
+packages.  This will override the list of default URIs in
+configuration file. Protocols
+.I file,
+.I http,
+.I https,
+and
+.I ftp
+are supported. One or several URIs may be submitted, first URI takes precedence
+over the next URI.
+.IP "\-\-root dir"
+Use
+.I dir
+as rpm root directory when doing any rpm opertion. (Similar to rpm --root)
+\.Default is 
+.I /
+.IP "\-\-gnupg\-dir dir"
+Use
+.I dir
+as directory where Gnu Privacy Guard files are stored, instead of the
+default
+.I /etc/swup/gnupg/
+.IP "\-\-verbose"
+Write somewhat more verbose messages to stdout.
+.IP "\-\-notty"
+Run as if stdout is not a tty. Overrides verbose.
+.IP "\-\-quiet"
+Don't write status messages to stdout. Overrides \-\-verbose.
+.IP "\-\-silent"
+Be quiet and do not write any messages other than errors. Overrides
+\-\-verbose and \-\-quiet.
+.SH "DEBUG OPERATIONS"
+.IP "\-\-flush\-cache"
+Empty swup cache. This will additionally delete the rdf\-files, which are 
+normally kept. If you don't experience any problems with the built in 
+flush cache support, there are no reason for ever using this operation.
+.IP "\-\-remove\-lock"
+Remove the lockfile if found. This is normally not needed, as the lockfile
+is removed after each run, successful or not.
+.SH "DEBUG OPTIONS"
+.IP "\-\-ignore\-lock"
+Do not check/set/remove lockfile. (For debugging)
+.SH "REGULAR EXPRESSIONS"
+Python provides a rich regular expression syntax, and uses a traditional NFA
+match engine. SWUP uses a subset of this syntax. Most notably swup does not
+treat
+.B +
+as a control character, but rather like a normal character. To emulate the 
+behaviour of
+.B +
+one may follow this scheme:
+.IP "fo+ = foo*"
+Regular expressions must either be padded with backslash characters or 
+encapsulated in single quotes.
+.SH "ENVIRONMENT VARIABLES"
+.I http_proxy
+Defined host (and optionally port number) of the http proxy, example: 
+"http://proxy.example.com:3128/"
+.I ftp_proxy
+Defined host (and optionally port number) of the ftp proxy
+.SH "FILES"
+.I /etc/swup/swup.conf
+.RS
+System wide configuration file for swup.
+See
+.BR swup(5)
+for more details.
+.RE
+.I /etc/swup/gnupg
+.RS
+Directory where Gnu Privacy Guard files are stored.
+.SH "DIAGNOSTICS"
+.I swup
+will write messages to stdout and stderr. Upon completion a standard
+exit code is returned to the calling shell. swup returns 0 for a
+succesfull execution, 1 for general error and 2 for command line
+syntax error.
+.SH "AUTHORS"
+Olaf Trygve Berglihn,
+Hans Almåsbakk,
+Christian H. Toldnes,
+and Tor Hveem
+
+

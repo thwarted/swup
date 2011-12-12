@@ -1,0 +1,72 @@
+.\" -*- nroff -*-
+.\" $Id: rdfgen.1,v 1.8 2005/01/17 08:33:42 christht Exp $
+.\" Copyright (c) Trustix AS 2001, 2002, 2003
+.TH "RDFGEN" "1" "Jan 17 2005" "" ""
+.SH "NAME"
+rdfgen \- Resource Description Framework GENerator for SWUP
+.SH "SYNOPSIS"
+.IP rdfgen 
+[\-q | \-\-quiet]
+[\-b ]
+[\-C ]
+[\-S ]
+[\-o <dir>] 
+[\-L <URI>]
+[\-k <keyid>]
+[\-P <filename>]
+[\-g <homedir>]
+[files/directories [...]]
+
+.SH "DESCRIPTION"
+.B rdfgen
+\- generate database files in rdf/xml format to work with the txpi or
+swup software upgrading tool.
+.SH "OPTIONS"
+.IP "\-C"
+Do not compress files.
+.IP "\-L"
+Link against remote repository given by <URI>.  URI must end with a trailing
+"/" and determins where to find resources.rdf ( or resourcelist.rdf ) and
+filelist. http:// https:// and ftp:// are supported protocols.
+.IP "\-P <filename>"
+Read the gpg key password from given <filename>
+.IP "\-S"
+Sign rdfs. Signing is needed for swup to work, however, time is saved when
+skipping this, and signatures can be generated manually using gnupg or 
+equivalent tool, when a valid repository has been generated.
+.IP "\-b"
+Backward compatible mode. Generates a repository that is supported by both 
+new and old versions of swup. Generates a lot of small files which are signed,
+so it takes quite some time to execute.
+.IP "\-g <homedir>"
+Use a specified gpg homedir instead of the default $HOME/.gnupg,
+given as a <directory>. Needed when run in a cron job.
+.IP "\-h | \-\-help"
+Print brief usage information.
+.IP "\-k <keyid>"
+Sign all rpms and all created files with given <keyid>, needed when signing
+files.
+.IP "\-o <dir>"
+Relative path to directory to which database files should be written. 
+Default is "./rdfs". Path should be as short as possible, and thus contained
+within the active root of the service providing the protocol of choice, 
+like http or ftp.
+.IP "\-q, \-\-quiet"
+Print as little as possible.
+.IP "\-s <dir>"
+Place the signatures for the rpms in this directory. Must be relative in the 
+same was as with 
+.I"\-o"
+Useful when creating rdf repository for a remote repository of rpms.
+.IP "\-v, \-\-version"
+Print version and copyright information.
+.SH "DIAGNOSTICS"
+.I rdfgen
+will write messages to stdout and stderr. Upon completion a standard
+exit code is returned to the calling shell. rdfgen returns 0 for a
+succesfull execution and 1 for failure.
+.SH "AUTHORS"
+Olaf Trygve Berglihn,
+Hans Almåsbakk,
+Christian H. Toldnes,
+Tor Hveem,

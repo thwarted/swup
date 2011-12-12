@@ -1,0 +1,419 @@
+Swup CVS Guide
+---
+
+
+1. Setup you client
+2. Check out
+3. Compare
+4. History
+5. Status
+6. Remove a file
+7. Add a file
+8. Move a file
+9. Check in
+10. Update
+11. Tagging
+12. Patched
+13. Backing out changes
+14. Branches
+15. Sticky tags
+
+
+
+
+
+1. Setup your cvs client
+
+First, create a .cvsrc in your $HOME.
+
+#begin .cvsrc
+setenv CVSROOT username@swup.trustix.org:/home/httpd/sites/http-swup.trustix.org/pub/cvs 
+setenv CVS_RSH  ssh
+alias   cvsstat 'cvs status \!* |& grep Status:'
+alias   cvswhat 'cvs status \!* |& grep Status: |& grep -v "to-date"'
+exit
+# default CVS options
+diff -u
+cvs -z4
+update -d -P
+checkout -P
+#end .cvsrc
+
+Remember to change username to your real username.
+
+
+
+2. Check out a copy of swup
+
+Check out the sources from the CVS repository with the following command: cvs
+co -P swup 
+
+which will create a sub-directory named swup  with the sources and each
+directory will have a sub-directory named CVS that contains info about the
+repository sources. Once you've checked-out the sources, you need not define
+$CVSROOT to work within the local sources. All the cvs commands will work, if
+they're invoked within the local source directories, and it's local host
+access. 
+
+
+
+
+
+
+
+
+
+
+
+3. Compare Local Changes
+
+Suppose you modified any of the checked-out or local sources. To compare the
+changes you've made to the repository sources: cvs diff [source_file]
+
+where you can give one or more optional source_file names, else cvs will
+compare all files in the current directory and all subdirectories. 
+
+However, be aware that this will not give any information about changes between
+the local source file and any changes that have been checked in by others. Only
+changes that have been made to the local source file and it's original source. 
+
+
+
+
+
+
+
+
+
+
+
+4. History of Changes
+
+To look at the history of changes: 
+cvs log [source_file]
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+5. Status of Changes
+
+To check the current status of a source_file or all the files: 
+cvs status [source_file]
+
+A couple of useful C-shell aliases to create are: 
+cvsstat 
+shows just the status of all files 
+alias   cvsstat 'cvs status \!* |& grep Status:'
+
+ 
+cvswhat 
+shows the status of files that are not "Up-to-date" 
+alias   cvswhat 'cvs status \!* |& grep Status: |& grep -v "to-date"'
+
+ 
+
+
+
+
+
+
+6. Remove a File
+
+To remove a file from the repository: 
+rm source_file             # must first remove it locally
+cvs rm source_file         # schedules it for removal
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+7. Add a File
+
+To add a file to the repository 
+cd <local copy root>
+vi source_file             # create the file first
+cvs add source_file        # schedules it to be added
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+8. Move a File
+
+This can not be done cleanly at the local level. The best way to do this with
+CVS is to go to the cvsroot repository and move the file or directory within
+the repository there (if you are interested in keeping the history of changes).
+The cvsroot repository keeps all files in their RCS form of filename,v . The
+next cvs update will manifest the file move. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+9. Check In Local Changes
+
+Once you've made all the changes you care to for the current batch then: 
+cvs ci [source_file]
+
+which checks-in the changes and updates the repository sources. CVS will pop-up
+an editor session where you can describe the changes made, which appears in the
+source_file log for each file affected. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+10. Update Local Sources
+
+If many people are working on the repository, you can obtain any changes in the
+repository that have been made since you've checked out the sources with: cvs
+update [source_file] and if there are conflicts, then CVS will notify you and
+flag it in the sources. On the Crays, I've noticed that CVS can't use the
+``patch'' facility hence it will default to copying, which is not a problem, so
+ignore such messages. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+11. Tagging Sources
+
+You can ``tag'' the current set of changes (revisions) with: 
+cvs tag tag_name
+
+then this set of local sources can be recovered with this ``tag_name'' 
+
+Another option is to tag the repository sources with 
+
+cvs rtag tag_name prj_name
+
+which you want to do for each ``release'' of the code, so you can always
+backtrack any bugs to the version released to the users. 
+
+
+
+
+
+
+
+
+
+12. Creating Patches
+
+You can create a ``patch'' file of changes with 
+cvs rdiff -u -r tag_name -r initial prj_name > patch_file
+
+which will have all the changes you've made between the ``tag_name'' version
+and the ``initial'' version. You can also create patch files between any two
+tags. 
+
+You can also create a "patch" file of your local changes with: 
+
+cvs diff -N -u -r tag_name > patch_file
+
+ 
+
+
+
+
+
+
+
+
+13. Backing Out Changes
+
+Suppose you modify a file, but don't want to keep the changes: 
+rm source_file                  # remove it from local sources
+cvs update source_file          # get a new copy from the repository
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+14. Using Branches
+
+Working with branches is one of the more difficult concepts to master with CVS,
+but it is one of the most useful for an active development project. 
+
+The concept is that the software project has made a release, say version 3.1.0,
+and work is now progressing on version 3.2. However, a bug was discovered in
+the released 3.1.0 version, which you want to fix. Suppose that the project was
+tagged with prj_3_1_0. Also, it will be assumed that it wasn't marked as a
+branch (-b). 
+
+
+Need to tag the current tag sources as a branch with 
+cvs rtag -b -r prj_3_1_0 prj_3_1_0_branch project_name
+
+ 
+
+Check out the given tagged version into a directory named prj.3.1.0 with 
+cvs checkout -d prj.3.1.0 -r prg_3_1_0_branch project_name
+
+ 
+
+
+
+Get into the prj.3.1.0 directory for further work. 
+
+Make whatever changes to the sources, which will be identified as version 3.1.1 
+
+Check in changes for this branch as 
+cvs commit
+
+ 
+
+Tag this version with 
+cvs tag -r prj_3_1_1
+
+ 
+
+Make a tar ball for distribution, and remove the branch project directory,
+which is no longer needed. 
+
+
+
+
+
+
+
+
+If there are any fixes that can be merged into the main development branch.
+(This only works if the differences between this branch and the development
+branch are fairly small.) Get into a checked-out project directory (not the
+branch directory which should have been removed).  Merge the branch changes
+with the main development branch with cvs update -j prj_3_1_1
+
+Carefully, note the output, and resolve any conflicts, and test changes. 
+
+Note that merges can be incorporated into other branches by applying them to
+whatever checked-out version. 
+
+
+
+
+
+
+
+
+15. Sticky Tags!
+
+ 
+
+Generally, what happens when a tagged version is checked out: 
+
+cvs checkout -d prj.3.1.0 -r prg_3_1_0 project_name
+
+Something in the CVS directories makes the tag ``sticky'' and no changes can be
+updated or checked in. An attempt to cvs commit any local changes usually
+results in a message saying the ``sticky'' tag is not a branch! 
+
+The tag needs to be made into a branch with 
+cvs tag -b -r prj_3_1_0 prj_3_1_0_branch
+
+ Where the -b is the key here to making a branch. 
+Update the current working version as a branch with: 
+cvs update -r prj_3_1_0_branch
+
+
+
+
+
+This will not affect the source files, only the CVS/Entries files will be
+updated to a different ``sticky'' tag ... a branch in this case.  The changes
+can now be checked in to that branch with cvs commit
+
+ 
+Changes in this branch can be merged into the development branch. (See the
+latter part of ``Using Branches'' for more details.) 
+
+More Info
+
+To get more usage info: 
+cvs --help                      # usage info and general cvs-options
+cvs --help-commands             # list & description of commands
+cvs --help-options              # general cvs-options
+cvs --help command              # command specific usage & command options
+
+and 
+man cvs                         # gives an overview
+
+
+

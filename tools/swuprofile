@@ -1,0 +1,10 @@
+#!/usr/bin/env python
+import profile,sys
+SWUP_LIBDIR = ("/usr/lib/swup")
+sys.path.append( SWUP_LIBDIR )
+import swup
+argstring = ""
+for i in sys.argv[1:]:
+    argstring += "'"+i+"',"
+    
+profile.run("swup.main(sys.argv[1:])")

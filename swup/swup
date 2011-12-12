@@ -1,0 +1,50 @@
+#!/usr/bin/python
+
+SWUP_LIBDIR = ("/usr/lib/swup")
+
+IMPORTERROR_MESSAGE = """swup: Fatal error: unable to load the swup libraries from %s
+swup: Check your swup installation.\n""" % SWUP_LIBDIR
+
+import os, sys
+os.umask(0022)
+
+def checklibdir():
+    try:
+        sys.path.append( SWUP_LIBDIR )
+        import swup
+        del swup
+    except ImportError, errmsg:
+        sys.stderr.write( IMPORTERROR_MESSAGE )
+        sys.exit( 1 )
+    except:
+        raise
+
+def runswup(args):
+    import swup
+    retval = swup.main( args )
+    del swup
+    return retval
+
+try:
+    checklibdir()
+    retval, extra = runswup(sys.argv[1:])
+    if retval == 1:
+        sys.stderr.write("A new swup version has been installed, "+\
+                        "restarting swup.\n")
+        os.execvp(sys.argv[0],sys.argv)
+    elif retval == 2:
+        sys.stderr.write("Automatic reboot has been requested by "+\
+                        "one or several upgraded package(s).")
+        command = "shutdown -r +%s \"Automatic reboot requested " %extra \
+                    +"by the software updater.\" &"
+        fd = os.popen(command)
+        fd.close()
+        sys.exit(0)
+    else:
+        sys.exit(0)
+except KeyboardInterrupt:
+    sys.stderr.write( "User interrupt - exiting.\n" )
+    sys.stderr.flush()
+    sys.exit( 1 )
+except:
+    raise
