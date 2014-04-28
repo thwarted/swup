@@ -1,6 +1,5 @@
-include ./GNUmakefile.inc
-.PHONY: clean all install
-SUBDIRS = swup rdfgen etc man swuplib cgi
+include GNUmakefile.inc
+SUBDIRS = src etc man
 
 all:
 	for dir in $(SUBDIRS); do $(MAKE) -C $$dir $@ || exit 1; done
@@ -8,9 +7,7 @@ all:
 install:
 	for dir in $(SUBDIRS); do $(MAKE) -C $$dir $@ || exit 1; done
 
-uninstall:
-	for dir in $(SUBDIRS); do $(MAKE) -C $$dir $@ || exit 1; done
-
+.PHONY: clean
 clean:
 	for dir in $(SUBDIRS); do $(MAKE) -C $$dir $@ || exit 1; done
 

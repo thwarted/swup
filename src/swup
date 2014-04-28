@@ -1,0 +1,26 @@
+#! /usr/bin/env python
+
+SWUP_LIBDIR = "/usr/lib/swup"
+
+IMPORTERROR_MESSAGE = """swup: Fatal error: unable to load the swup libraries from %s
+swup: Check your swup installation.\n""" % SWUP_LIBDIR
+
+import os, sys
+if os.getuid() != 0:
+    sys.stderr.write("You need to be root to do that.\n")
+    sys.exit(1)
+try:
+    sys.path.append( SWUP_LIBDIR )
+    import swup
+except ImportError, errmsg:
+    sys.stdout.write( IMPORTERROR_MESSAGE )
+    sys.exit( 1 )
+
+try:
+    swup.main( sys.argv[1:] )
+except KeyboardInterrupt:
+    sys.stderr.write( "User interrupt - exiting.\n" )
+    sys.stderr.flush()
+    sys.exit( 1 )
+
+
